@@ -1,0 +1,6 @@
+# AWS Configuration
+cloud:
+  aws:
+    stack:
+      auto: false
+
