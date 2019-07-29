@@ -8,6 +8,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AmeDigitalApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-public class PlanetsControllerTest {
+public class PlanetsApiTest {
 
 }

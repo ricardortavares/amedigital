@@ -24,6 +24,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 @Configuration
@@ -51,6 +52,10 @@ public class JacksonConfiguration {
         builder.modules(module);
         builder.serializationInclusion(JsonInclude.Include.NON_NULL);
         ObjectMapper mapper = builder.build();
+        
+        SimpleModule stringModule = new EmptyStringDeserializer();
+        mapper.registerModule(stringModule);
+        
         
         return mapper;
     }

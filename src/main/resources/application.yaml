@@ -1,0 +1,16 @@
+cloud:
+    aws:
+        stack:
+           auto: false
+        region:
+           static: us-east-1
+
+management:
+    endpoints:
+        web:
+            exposure:
+                include: "*"
+
+application:
+   dynamo:
+      provider: local

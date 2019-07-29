@@ -1,4 +1,4 @@
-package com.ame.amedigital.service;
+package com.ame.amedigital.repository;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

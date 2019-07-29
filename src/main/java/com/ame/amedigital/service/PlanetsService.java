@@ -23,45 +23,50 @@ import com.ame.amedigital.api.rest.client.response.PlanetsListClientResponse;
 import com.ame.amedigital.api.rest.client.response.PlanetsResponseClient;
 import com.ame.amedigital.api.rest.response.PlanetsResponse;
 import com.ame.amedigital.repository.Planets;
+import com.ame.amedigital.repository.PlanetsRepositoryDynamo;
 
 @Service
 public class PlanetsService {
 
 	private static final Log LOG = LogFactory.getLog(PlanetsService.class);
 
-	private static final String SERVER = "https://swapi.co/";
+	private static final String SERVER = "https://swapi.co/api/";
 
 	@Autowired
 	private PlanetsRepositoryDynamo repository;
+	
+	@Autowired
+	private IdGenerator idGenerator;
 
 	@Autowired
 	@Qualifier("swapi-template")
 	private RestTemplate restTemplate;
 
-	@Autowired
-	private IdGenerator uuidGenerator;
-
 	public void save(String name, String climate, String terrain) {
 		Planets entity = new Planets();
 
+		entity.setPlanetId(idGenerator.generateId().toString().toUpperCase());
 		entity.setClimate(climate);
 		entity.setFilms(getCountFilms(name));
 		entity.setName(name);
 		entity.setTerrain(terrain);
-		entity.setPlanetId(uuidGenerator.generateId().toString().toUpperCase());
-
+		
 		repository.save(entity);
 	}
 
 	public Planets getById(String planetsId) {
 		return repository.findByIdUnchecked(planetsId);
 	}
+	
+	public List<Planets> getPlanetsFromDB(){
+		return repository.getAll();
+	}
 
 	public void deleteById(String planetId) {
 		repository.delete(planetId);
 	}
 
-	public List<PlanetsResponse> getAllPlanets() {
+	public List<PlanetsResponse> getPlanetsFromClient() {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

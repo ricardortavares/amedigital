@@ -1,5 +1,6 @@
-package com.ame.amedigital.service;
+package com.ame.amedigital.repository;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,13 +8,12 @@ import org.springframework.stereotype.Repository;
 
 import com.amazonaws.services.dynamodbv2.document.ItemCollection;
 import com.amazonaws.services.dynamodbv2.document.QueryOutcome;
-import com.ame.amedigital.repository.Planets;
 
 @Repository
 public class PlanetsRepositoryDynamo extends AbstractDynamoRepository<Planets, String>{
 	
 	private static final String TABLE_NAME = "PLANETS";
-	private static final String HASH_COLUMN = "PLANET_ID";
+	private static final String HASH_COLUMN = "planetId";
 	private static final String PLANET_NAME_INDEX = "name-index";
 			
 
@@ -33,6 +33,12 @@ public class PlanetsRepositoryDynamo extends AbstractDynamoRepository<Planets, S
         return planets.stream()
                 .filter(p -> p.getName() == name)
                 .findFirst();
+	}
+	
+	public List<Planets> getAll(){
+		List<Planets> result = new LinkedList<>();
+        scan(result::add);
+        return result;
 	}
 
 }

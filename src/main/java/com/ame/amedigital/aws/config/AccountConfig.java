@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AccountConfig {
 	
-	@Value("${cloud.aws.region.static:}")
+	@Value("${cloud.aws.region.static}")
     private String regionName;
 
     public String getRegionName() {

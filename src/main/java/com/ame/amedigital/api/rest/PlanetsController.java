@@ -3,6 +3,7 @@ package com.ame.amedigital.api.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +24,30 @@ public class PlanetsController {
 	@Autowired
 	private PlanetsService service;
 
-	@PostMapping
-	public void save(@RequestBody PlanetsRequest planetsRequest) {
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseObject<Void> save(@RequestBody PlanetsRequest planetsRequest) {
 		service.save(planetsRequest.getName(), planetsRequest.getClimate(), planetsRequest.getTerrain());
+		
+		return new ResponseBuilder<Void>().build();
+	}
+	
+	@GetMapping
+	public ResponseObject<List<Planets>> getAllPlanets(){
+		List<Planets> response = service.getPlanetsFromDB();
+		return new ResponseBuilder<List<Planets>>().withData(response).build();
+	}
+	
+	@GetMapping("/client")
+	public ResponseObject<List<PlanetsResponse>> getPlanetsFromClient(){
+		List<PlanetsResponse> response = service.getPlanetsFromClient();
+		return new ResponseBuilder<List<PlanetsResponse>>().withData(response).build();
+	}
+	
+	@GetMapping("/{name}")
+	public ResponseObject<PlanetsResponse> getByName(@PathVariable("name") String name) throws Exception{
+		PlanetsResponse response = service.getByName(name);
+		
+		return new ResponseBuilder<PlanetsResponse>().withData(response).build();
 	}
 
 	@GetMapping("/{id}")
@@ -46,17 +68,4 @@ public class PlanetsController {
 		service.deleteById(id);
 	}
 	
-	@GetMapping
-	public ResponseObject<List<PlanetsResponse>> getAllPlanets(){
-		List<PlanetsResponse> response = service.getAllPlanets();
-		return new ResponseBuilder<List<PlanetsResponse>>().withData(response).build();
-	}
-	
-	@GetMapping
-	public ResponseObject<PlanetsResponse> getByName(@PathVariable("name") String name) throws Exception{
-		PlanetsResponse response = service.getByName(name);
-		
-		return new ResponseBuilder<PlanetsResponse>().withData(response).build();
-	}
-
 }
